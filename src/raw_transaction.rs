@@ -70,8 +70,8 @@ fn keccak256_hash(bytes: &[u8]) -> Vec<u8> {
 fn ecdsa_sign(hash: &[u8], private_key: &[u8], chain_id: &u8) -> EcdsaSig {
     let s = Secp256k1::signing_only();
     let msg = Message::from_slice(hash).unwrap();
-    let key = SecretKey::from_slice(&s, private_key).unwrap();
-    let (v, sig_bytes) = s.sign_recoverable(&msg, &key).serialize_compact(&s);
+    let key = SecretKey::from_slice(private_key).unwrap();
+    let (v, sig_bytes) = s.sign_recoverable(&msg, &key).serialize_compact();
 
     EcdsaSig {
         v: vec![v.to_i32() as u8 + chain_id * 2 + 35],
